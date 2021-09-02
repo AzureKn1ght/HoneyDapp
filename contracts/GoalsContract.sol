@@ -1,14 +1,15 @@
-pragma solidity ^0.5.1;
+// SPDX-License-Identifier: MPL-2.0-no-copyleft-exception
+pragma solidity ^0.8.7;
 
 contract GoalsContract
 {
-    //This contract is to create functions for Savings Goals
     
+    //This contract is to create functions for Savings Goals
     address owner;
     uint public totalGoalsCounter;
     
     //Status variable definition
-    enum Status { INCOMPLETE, COMPLETE }
+    enum Status { INCOMPLETE, COMPLETE, DELETED }
     Status constant defaultStatus = Status.INCOMPLETE;
     
     //Goal Data Type
@@ -22,28 +23,32 @@ contract GoalsContract
     }
     
     
-    //One account can hold many goals (many goalTokens, each token one goal)    
+    //One account can hold many goals     
     mapping (address => Goal[]) public __ownedGoals;
-
-    constructor() public
+    constructor() 
     {
         owner = msg.sender;
         totalGoalsCounter = 0;
     }
     
-    //Goal adding event, basically just a console.log
+    
+    //EVENTS, basically just a console.log for transactions
     event Add(address _owner, uint _goalID, uint _amt, string _des);
-    
-    function getGoalsCount() public view returns (uint)
+    event Complete(address _owner, uint _goalID, string _des, Status _status);
+
+
+    //GET TOTAL NO OF GOALS OWNED BY AN ACCOUNT
+    function getNoOfGoals(address goalOwner) view public returns (uint)
     {
-        return totalGoalsCounter;
+        uint quantity;
+        quantity = __ownedGoals[goalOwner].length;
+        return quantity;
     }
+        
     
-    
-    //FUNCTION TO ADD A NEW GOAL
+    //CREATES A NEW GOAL AND ADD TO ACCOUNT
     function addGoal(address goalOwner, uint amt, string memory des) public returns (uint)
     {
-        totalGoalsCounter = totalGoalsCounter + 1;
         Goal memory myGoal = Goal(
         {
             ownerAddress: goalOwner,
@@ -53,33 +58,42 @@ contract GoalsContract
             status: defaultStatus
         });
         
+        //Add goal and increment counter
         __ownedGoals[goalOwner].push(myGoal);
-        emit Add(goalOwner, totalGoalsCounter, amt, des);
+        totalGoalsCounter = totalGoalsCounter + 1;
+
+        emit Add(goalOwner, totalGoalsCounter-1, amt, des);
+        return totalGoalsCounter - 1; //ID of the Goal
+    }
+    
+    
+    //MARKS A PARTICULAR GOAL AS COMPLETED
+    function completeGoal(address goalOwner, uint goalID) public returns (Status)
+    {
+        //Have to use "storage" to make the changes permanent 
+        Goal storage myGoal = __ownedGoals[goalOwner][goalID];
+        myGoal.status = Status.COMPLETE;
         
-        return totalGoalsCounter;
+        emit Complete(goalOwner, goalID, myGoal.description, myGoal.status);
+        return myGoal.status;
     }
     
     
-    //GET TOTAL NO OF GOALS OWNED BY AN ACCOUNT
-    function getNoOfGoals(address goalOwner) view public returns (uint)
+    //RETURNS THE DETAILS OF A PARTICULAR GOAL
+    function getGoal(address goalOwner, uint goalID) public view returns (Goal memory)
     {
-        uint quantity;
-        quantity = __ownedGoals[goalOwner].length;
-        return quantity;
+        //Just retrieve the Goal, no need permanent storage 
+        Goal memory myGoal = __ownedGoals[goalOwner][goalID];
+        return myGoal;
     }
     
     
-    //Destroys the smart contract. Only owner can call.
-    function destroy() payable public 
+    //RETURNS THE DETAILS OF A PARTICULAR GOAL
+    function getAllGoals(address goalOwner) public view returns (Goal[] memory)
     {
-        require(msg.sender == owner);
-        selfdestruct(owner);
+        //Just retrieve the Goal, no need permanent storage 
+        Goal[] memory myGoals = __ownedGoals[goalOwner];
+        return myGoals;
     }
- 
-    
-    //TODO
-    //complete a Goal
-    //get account Goals
-    
 
 }
