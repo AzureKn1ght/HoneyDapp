@@ -51,7 +51,7 @@ function addGoal(e) {
 }
 
 //Add event listener for buttons
-b1.addEventListener("click", addGoal);
+//b1.addEventListener("click", addGoal);
 document.getElementById("b2").onclick = function () {
   location.href = "dashboard.html";
 };

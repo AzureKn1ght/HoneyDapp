@@ -2,8 +2,42 @@
 //Dependencies
 //const Web3 = require('web3');
 //const GoalsContract = require('./HoneyDapp/frontend/GoalsContract.json');  
-//const web3 = new Web3.providers.HttpProvider('https://ropsten.infura.io/v3/5880660930f14d27970e5ae5f5b73e26');
-var web3 = new Web3('https://ropsten.infura.io/v3/5880660930f14d27970e5ae5f5b73e26'); 
+const web3 = new Web3(window.ethereum);
+
+
+const ethereumButton = document.querySelector('.enableEthereumButton');
+
+ethereumButton.addEventListener('click', () => {
+  //Will Start the metamask extension
+ethereum.request({ method: 'eth_requestAccounts' });
+});
+
+let currentAccount = null;
+ethereum
+  .request({ method: 'eth_accounts' })
+  .then(handleAccountsChanged)
+  .catch((err) => {
+    // Some unexpected error.
+    // For backwards compatibility reasons, if no accounts are available,
+    // eth_accounts will return an empty array.
+    console.error(err);
+  });
+
+// Note that this event is emitted on page load.
+// If the array of accounts is non-empty, you're already
+// connected.
+ethereum.on('accountsChanged', handleAccountsChanged);
+
+// For now, 'eth_accounts' will continue to always return an array
+function handleAccountsChanged(accounts) {
+  if (accounts.length === 0) {
+    // MetaMask is locked or the user has not connected any accounts
+    console.log('Please connect to MetaMask.');
+  } else if (accounts[0] !== currentAccount) {
+    currentAccount = accounts[0];
+    // Do any other work!
+  }
+}
 
 
 //Create Contract instance
@@ -20,7 +54,7 @@ const init = async (e) => {                               // if using node js ne
     //Step 1: Get the input data from the form
     var d = desc.value;
     var a = amt.value;
-    console.log(`desc: ${desc}, amt: ${a}, id: ${userID}`);
+    console.log(`desc: ${d}, amt: ${a}`);
 
     //const web3 = new Web3(provider);
 	const conAddress = '0xAe790B847C02280Cb182c55E3ec95C418D1429E8'
@@ -30,14 +64,21 @@ const init = async (e) => {                               // if using node js ne
     conAddress
   	);
 
+
     //Step 2: Send transaction to smart contract
-    const addressGoalOwner = '0x4b7d0309042Be687F432B6fB73BCbcd405CD25e5';
-    //await contract.methods.addGoal(addressGoalOwner,a,d).send({
-     //   from: addressGoalOwner
-   // });
+    
+    contract.methods.addGoal(currentAccount,a,d).send({
+      from: currentAccount,
+    })
+        .then(receipt =>{
+        console.log(receipt)
+      }).catch(error =>{
+        console.log(error)
+      })
+    
 
     //calls the getAllGoals funtion and prints in the console
-    const data = await contract.methods.getAllGoals(addressGoalOwner).call();
+    const data = await contract.methods.getAllGoals(currentAccount).call();
     console.log(data);
 }
 
