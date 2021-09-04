@@ -42,6 +42,8 @@ function handleAccountsChanged(accounts) {
     window.location.href = "index.html";
   } else if (accounts[0] !== currentAccount) {
     currentAccount = accounts[0];
+    console.log(currentAccount);
+    sessionStorage.setItem("accountId", currentAccount);
   }
 }
 

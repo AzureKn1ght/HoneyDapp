@@ -28,24 +28,22 @@ var GoalsData = [
   },
 ];
 
-var total_balance = 0;
-var username = "";
-var userID = null;
+var total_balance;
+var accountHash;
 
 //Initialize the page on load
 function init() {
   //Get user name and id
-  username = sessionStorage.getItem("name");
-  userID = sessionStorage.getItem("user_id");
-  titleName.innerHTML = `Hello, ${username}`;
+  accountHash = sessionStorage.getItem("accountId") || "accountid";
+  titleName.innerHTML = `${accountHash}`;
 
   //Get the user account balance by user ID
   total_balance = sessionStorage.getItem("balance") || 6999;
-  balance.innerText = `$${total_balance}`;
+  balance.innerText = `ṈS$ ${total_balance}`;
 
   //Get the list of goals from server
   //Calculate the percentage for each goal
-  retrieveGoals(userID);
+  //retrieveGoals(userID);
 }
 
 function retrieveGoals(id) {

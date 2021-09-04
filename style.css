@@ -199,3 +199,8 @@ input[type="number"] {
 .progress{
   cursor: pointer;
 }
+
+#titleName{
+  font-size: 0.85rem;
+  color: grey;
+}
