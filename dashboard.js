@@ -37,6 +37,7 @@ function init() {
   accountHash = sessionStorage.getItem("accountId") || "accountid";
   titleName.innerHTML = `${accountHash}`;
 
+  //TODO: GET THE BALANCE FROM METAMASK WALLET
   //Get the user account balance by user ID
   total_balance = sessionStorage.getItem("balance") || 6999;
   balance.innerText = `ṈS$ ${total_balance}`;
@@ -48,6 +49,8 @@ function init() {
 
 function retrieveGoals(id) {
   let url = `http://localhost:3000/goals/by-id?user_id=${id}`;
+
+  //TODO: FETCH THE GOALS FROM SMART CONTRACT AND SPLIT INTO 2 ARRAYS
 
   fetch(url)
     .then((res) => {
@@ -61,6 +64,8 @@ function retrieveGoals(id) {
     });
 }
 
+
+//TODO: SPLIT THIS INTO ACTIVE ANF COMPLETED GOALS
 function calGoals() {
   let bal = total_balance;
   let elm = "";
@@ -104,6 +109,8 @@ function calGoals() {
   goalsContainer.innerHTML = elm;
 }
 
+
+//TODO: CHANGE THIS TO COMPLETE GOAL INSTEAD
 function deleteGoal(goalID, goalName) {
   if (confirm(`Delete: ${goalName}?`)) {
     //delete goal
@@ -124,6 +131,8 @@ function deleteGoal(goalID, goalName) {
       .catch((error) => console.log("error", error));
   }
 }
+
+
 
 function logout() {
   //Logout and redirect to login page
