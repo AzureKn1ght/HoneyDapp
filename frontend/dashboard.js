@@ -5,6 +5,8 @@ const b1 = document.getElementById("b1");
 const web3 = new Web3(window.ethereum);
 const conAddress = "0xAe790B847C02280Cb182c55E3ec95C418D1429E8";
 const contract = new web3.eth.Contract(abi, conAddress);
+const tokAddress = "0x53b41b7e15c24a2909880997a3ffa28890214893"; //TO REPLACE WITH TOKEN ADDRESS
+const tokContract = new web3.eth.Contract(tokenABI, tokAddress);
 
 //Goal array with sample data for example
 var GoalsData = [
@@ -17,8 +19,8 @@ var GoalsData = [
   },
 ];
 
-var total_balance;
-var accountHash;
+var total_balance = 6999;
+var accountHash = 0;
 
 //Initialize the page on load
 function init() {
@@ -26,13 +28,29 @@ function init() {
   accountHash = sessionStorage.getItem("accountId") || "accountid";
   titleName.innerHTML = `${accountHash}`;
 
-  //TODO: GET THE BALANCE FROM METAMASK WALLET
-  //Remember to use Math.trunc to remove the decimals
-  total_balance = sessionStorage.getItem("balance") || 6999;
-  balance.innerText = `ṈS$ ${total_balance}`;
+  //Get account balance from token contract
+  getTokenBal(accountHash);
 
-  //Get the list of goals from server
+  //Get the list of goals from smart contract
   retrieveGoals(accountHash);
+}
+
+//Function to get token balance
+function getTokenBal(id) {
+  tokContract.methods
+    .balanceOf(id)
+    .call()
+    .then((result) => {
+      let bal = Math.trunc(web3.utils.fromWei(result));
+      console.log(bal);
+
+      sessionStorage.setItem("balance", bal);
+      total_balance = sessionStorage.getItem("balance");
+      balance.innerText = `ṈS$ ${total_balance}`;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 }
 
 //Function to fetch the goals from the Smart Contract
@@ -53,11 +71,6 @@ function retrieveGoals(id) {
       GoalsData.forEach((goal) => {
         if (goal.status == 0) activeGoals.push(goal);
         else if (goal.status == 1) completedGoals.push(goal);
-
-        //Load goal details
-        let name = goal.description;
-        let amt = goal.balance;
-        let percent = 0;
       });
 
       displayGoals(activeGoals, "activeGoals");
