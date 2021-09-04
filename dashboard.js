@@ -80,6 +80,7 @@ function displayGoals(goalArr, type) {
     //Load goal details
     let name = goal.description;
     let amt = goal.amount;
+    let id = goal.goalID;
     let percent = 0;
 
     if (type === "completedGoals") {
@@ -99,7 +100,9 @@ function displayGoals(goalArr, type) {
     elm += `
       <span>${name}<span class="amt">ṈS$${amt}</span>
           <div class="progress" style="height: 25px"
-          onclick="completeGoal(${goal.goalID}, '${name}', '${percent}');">
+          onclick="completeGoal(${id}, '${name}', '${percent}', '${type}');"
+          title="click to mark as complete"
+          >
             <div
               class="progress-bar ${style}"
               role="progressbar"
@@ -120,26 +123,27 @@ function displayGoals(goalArr, type) {
 }
 
 //TODO: CHANGE THIS TO COMPLETE GOAL INSTEAD
-function completeGoal(goalID, goalName, percentage) {
-  if (percentage != 100) return;
+function completeGoal(goalID, goalName, percentage, type) {
+  if (percentage != 100 || type === "completedGoals") return;
 
   if (confirm(`Mark as Complete: "${goalName}"?`)) {
-    //delete goal
-    var requestOptions = {
-      method: "DELETE",
-      redirect: "follow",
-    };
-
-    fetch(
-      `http://localhost:3000/goals/delete/by-id?goal_id=${goalID}`,
-      requestOptions
-    )
-      .then((response) => response.text())
-      .then((result) => {
-        console.log(result);
+    //Send request to the Smart Contract
+    contract.methods
+      .completeGoal(currentAccount, goalID - 1)
+      .send({
+        from: currentAccount,
+      })
+      .then((receipt) => {
+        console.log(receipt);
         location.reload();
       })
-      .catch((error) => console.log("error", error));
+      .catch((error) => {
+        console.log(error);
+      });
+
+    //Alert user to wait for transactions
+    alert("Processing: sending your request");
+    console.log("Mark as complete: processing...");
   }
 }
 
