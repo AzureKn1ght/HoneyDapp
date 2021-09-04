@@ -20,7 +20,7 @@ function handleChainChanged(_chainId) {
 /***********************************************************/
 /* Handle user accounts and accountsChanged (per EIP-1193) */
 /***********************************************************/
-let myAccount = null;
+let currentAccount = null;
 ethereum
   .request({ method: "eth_accounts" })
   .then(handleAccountsChanged)
@@ -40,7 +40,17 @@ function handleAccountsChanged(accounts) {
     // MetaMask is locked or the user has not connected any accounts
     alert("Please connect to MetaMask.");
     window.location.href = "index.html";
-  } else if (accounts[0] !== myAccount) {
-      myAccount = accounts[0];
+  } else if (accounts[0] !== currentAccount) {
+    currentAccount = accounts[0];
   }
+}
+
+/***********************************************************/
+/*              Handle account disconnection               */
+/***********************************************************/
+ethereum.on("disconnect", handleAccountsDisconnected);
+
+function handleAccountsDisconnected() {
+  alert("Please connect to MetaMask.");
+  if (!on_index) window.location.href = "index.html";
 }
