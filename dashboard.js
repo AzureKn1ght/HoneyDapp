@@ -2,29 +2,18 @@
 const balance = document.getElementById("balance");
 const titleName = document.getElementById("titleName");
 const b1 = document.getElementById("b1");
-const goalsContainer = document.getElementById("goalsContainer");
+const web3 = new Web3(window.ethereum);
+const conAddress = "0xAe790B847C02280Cb182c55E3ec95C418D1429E8";
+const contract = new web3.eth.Contract(abi, conAddress);
 
+//Goal array with sample data for example
 var GoalsData = [
   {
-    goal_id: 1,
-    description: "Books",
-    balance: 3886,
-    date_created: "2021-01-17",
-    user_id: 206,
-  },
-  {
-    goal_id: 2,
-    description: "Music",
-    balance: 4244,
-    date_created: "2021-05-25",
-    user_id: 351,
-  },
-  {
-    goal_id: 3,
-    description: "Books",
-    balance: 7341,
-    date_created: "2020-09-29",
-    user_id: 380,
+    ownerAddress: "0x769c4342baC4559cd32C9d5B0F9109131C934a0F",
+    goalID: "1",
+    amount: "25",
+    description: "Buy Books",
+    status: "0",
   },
 ];
 
@@ -38,60 +27,81 @@ function init() {
   titleName.innerHTML = `${accountHash}`;
 
   //TODO: GET THE BALANCE FROM METAMASK WALLET
-  //Get the user account balance by user ID
+  //Remember to use Math.trunc to remove the decimals
   total_balance = sessionStorage.getItem("balance") || 6999;
   balance.innerText = `ṈS$ ${total_balance}`;
 
   //Get the list of goals from server
-  //Calculate the percentage for each goal
-  //retrieveGoals(userID);
+  retrieveGoals(accountHash);
 }
 
+//Function to fetch the goals from the Smart Contract
 function retrieveGoals(id) {
-  let url = `http://localhost:3000/goals/by-id?user_id=${id}`;
-
-  //TODO: FETCH THE GOALS FROM SMART CONTRACT AND SPLIT INTO 2 ARRAYS
-
-  fetch(url)
-    .then((res) => {
-      return res.json();
+  contract.methods
+    .getAllGoals(id)
+    .call()
+    .then((result) => {
+      console.log(result);
+      return result;
     })
     .then((data) => {
-      console.log(data);
       GoalsData = data;
+      console.log(GoalsData);
+      let activeGoals = [];
+      let completedGoals = [];
 
-      calGoals();
+      GoalsData.forEach((goal) => {
+        if (goal.status == 0) activeGoals.push(goal);
+        else if (goal.status == 1) completedGoals.push(goal);
+
+        //Load goal details
+        let name = goal.description;
+        let amt = goal.balance;
+        let percent = 0;
+      });
+
+      displayGoals(activeGoals, "activeGoals");
+      displayGoals(completedGoals, "completedGoals");
+    })
+    .catch((error) => {
+      console.log(error);
     });
 }
 
-
-//TODO: SPLIT THIS INTO ACTIVE ANF COMPLETED GOALS
-function calGoals() {
+//Function to display the Goals in HTML
+function displayGoals(goalArr, type) {
   let bal = total_balance;
   let elm = "";
+  let goalsContainer = document.getElementById(type);
+  let style = type === "activeGoals" ? "bg-success" : "bg-secondary";
+  if (goalArr.length === 0) elm = "N/A";
 
-  GoalsData.forEach((goal) => {
+  goalArr.forEach((goal) => {
     //Load goal details
     let name = goal.description;
-    let amt = goal.balance;
+    let amt = goal.amount;
     let percent = 0;
 
-    //Calc the percentage
-    if (bal >= amt) {
+    if (type === "completedGoals") {
       percent = 100;
-      bal -= amt;
     } else {
-      percent = Math.trunc((bal / amt) * 100);
-      bal = 0;
+      if (bal >= amt) {
+        //Calc the percentage
+        percent = 100;
+        bal -= amt;
+      } else {
+        percent = Math.trunc((bal / amt) * 100);
+        bal = 0;
+      }
     }
 
     //Add it to the element
     elm += `
-      <span>${name}<span class="amt">$${amt}</span>
+      <span>${name}<span class="amt">ṈS$${amt}</span>
           <div class="progress" style="height: 25px"
-          onclick="deleteGoal(${goal.goal_id}, '${name}');">
+          onclick="completeGoal(${goal.goalID}, '${name}', '${percent}');">
             <div
-              class="progress-bar bg-success"
+              class="progress-bar ${style}"
               role="progressbar"
               style="width: ${percent}%"
               aria-valuenow="${percent}"
@@ -109,10 +119,11 @@ function calGoals() {
   goalsContainer.innerHTML = elm;
 }
 
-
 //TODO: CHANGE THIS TO COMPLETE GOAL INSTEAD
-function deleteGoal(goalID, goalName) {
-  if (confirm(`Delete: ${goalName}?`)) {
+function completeGoal(goalID, goalName, percentage) {
+  if (percentage != 100) return;
+
+  if (confirm(`Mark as Complete: "${goalName}"?`)) {
     //delete goal
     var requestOptions = {
       method: "DELETE",
@@ -131,8 +142,6 @@ function deleteGoal(goalID, goalName) {
       .catch((error) => console.log("error", error));
   }
 }
-
-
 
 function logout() {
   //Logout and redirect to login page
