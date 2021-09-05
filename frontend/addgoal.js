@@ -2,13 +2,18 @@
 const desc = document.getElementById("desc");
 const amt = document.getElementById("amt");
 const b1 = document.getElementById("b1");
-var username = sessionStorage.getItem("name");
-var userID = sessionStorage.getItem("user_id");
+const web3 = new Web3(window.ethereum);
+const conAddress = "0xAe790B847C02280Cb182c55E3ec95C418D1429E8";
+const contract = new web3.eth.Contract(abi, conAddress);
   
 //Goals (goal_id, description, balance, date_created, user_id);
 
 //Add Goal Function
-function addGoal(e) {
+
+//Create Contract instance
+const goalAdd = async (e) => {
+  
+
   e.preventDefault(); //to prevent form from submitting and refreshing the page
 
   //to prevent empty input from submitting
@@ -20,38 +25,28 @@ function addGoal(e) {
   //Step 1: Get the input data from the form
   var d = desc.value;
   var a = amt.value;
-  console.log(`desc: ${desc}, amt: ${a}, id: ${userID}`);
+  console.log(`desc: ${d}, amt: ${a}`);
 
-  //Step 2: Post the data to server to create
-  var myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
+  //Step 2: Send transaction to smart contract
 
-  var raw = JSON.stringify({
-    description: d, 
-    balance: a, 
-    user_id: userID,
-  });
-
-  var requestOptions = {
-    method: "POST",
-    headers: myHeaders,
-    body: raw,
-    redirect: "follow",
-  };
-
-  fetch("http://localhost:3000/goals/add", requestOptions)
-    .then((response) => {
-      if (response.ok) {
-        location.href = "dashboard.html";
-      } else {
-        alert("Failed: " + response.text());
-      }
+  contract.methods
+    .addGoal(currentAccount, a, d)
+    .send({
+      from: currentAccount,
     })
-    .catch((error) => alert("Error: " + error));
-}
+    .then((receipt) => {
+      console.log(receipt);
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+    .then(() => {                                         //redirects user to dashboard once transaction is complete
+      window.location.href = "dashboard.html";
+    })
+};
 
 //Add event listener for buttons
-//b1.addEventListener("click", addGoal);
+b1.addEventListener("click", goalAdd);
 document.getElementById("b2").onclick = function () {
   location.href = "dashboard.html";
 };
