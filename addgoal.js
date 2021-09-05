@@ -36,13 +36,12 @@ const goalAdd = async (e) => {
     })
     .then((receipt) => {
       console.log(receipt);
+      window.location.href = "dashboard.html";
     })
     .catch((error) => {
       console.log(error);
-    })
-    .then(() => {                                         //redirects user to dashboard once transaction is complete
-      window.location.href = "dashboard.html";
-    })
+    });
+   
 };
 
 //Add event listener for buttons
