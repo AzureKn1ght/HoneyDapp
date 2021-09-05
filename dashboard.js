@@ -67,13 +67,29 @@ function retrieveGoals(id) {
       console.log(GoalsData);
       let activeGoals = [];
       let completedGoals = [];
+      let index = 0;
 
       GoalsData.forEach((goal) => {
-        if (goal.status == 0) activeGoals.push(goal);
-        else if (goal.status == 1) completedGoals.push(goal);
+        let myGoal = {
+          ownerAddress: goal.ownerAddress,
+          goalID: index,
+          amount: goal.amount,
+          description: goal.description,
+          status: goal.status,
+        };
+        index += 1;
+        console.log(myGoal);
+
+        if (myGoal.status == 0) activeGoals.push(myGoal);
+        else if (myGoal.status == 1) completedGoals.push(myGoal);
       });
 
+      console.log("Active Goals:");
+      console.log(activeGoals);
       displayGoals(activeGoals, "activeGoals");
+
+      console.log("Completed Goals: ");
+      console.log(completedGoals);
       displayGoals(completedGoals, "completedGoals");
     })
     .catch((error) => {
@@ -142,7 +158,7 @@ function completeGoal(goalID, goalName, percentage, type) {
   if (confirm(`Mark as Complete: "${goalName}"?`)) {
     //Send request to the Smart Contract
     contract.methods
-      .completeGoal(currentAccount, goalID - 1)
+      .completeGoal(currentAccount, goalID)
       .send({
         from: currentAccount,
       })
