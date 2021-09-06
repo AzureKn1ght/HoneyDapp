@@ -20,5 +20,6 @@ Project submission for: COMFTMCSB11 Making Contracts Smart with Blockchain.
   <img src="screenshots/screenshot5.png" width="30%">
 </p>
 
-
+&nbsp;
+&nbsp;
 
