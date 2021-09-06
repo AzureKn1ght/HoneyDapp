@@ -5,7 +5,7 @@ const b1 = document.getElementById("b1");
 const web3 = new Web3(window.ethereum);
 const conAddress = "0xAe790B847C02280Cb182c55E3ec95C418D1429E8";
 const contract = new web3.eth.Contract(abi, conAddress);
-const tokAddress = "0x4939af2ecec8f07387d97513e5830ae3d9152421"; //TO REPLACE WITH TOKEN ADDRESS
+const tokAddress = "0x4939af2ecec8f07387d97513e5830ae3d9152421"; 
 const tokContract = new web3.eth.Contract(tokenABI, tokAddress);
 
 //Goal array with sample data for example
