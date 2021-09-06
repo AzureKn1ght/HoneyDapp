@@ -1,142 +1,100 @@
 <!-- REFERENCE COPY  -->
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link rel="icon" href="favicon.ico" type="image/x-icon" />
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-    <!-- Bootstrap CSS -->
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-      crossorigin="anonymous"
-    />
-    <!-- stylesheet -->
-    <link rel="stylesheet" href="style.css" />
-    <title>HONEY - My Tokens</title>
-  </head>
-  <body>
-    <div class="logo">
-      <img src="./images/honey.jpeg" />
-    </div>
-    <br />
 
-    <div class="container" id="details">
-      <h1 id="titleName">Hello</h1>
-      This is just a blank placeholder page.
-      <br />
-      <h4>Your Balance</h4>
-      <h1 id="balance">NSGD 0.00</h1>
-      Roy to update this page with the token balances
-      <h3>Savings Goals</h3>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+  <!-- stylesheet -->
+  <link rel="stylesheet" href="style.css" />
+  <title>HONEY - My Tokens</title>
+</head>
 
-      <!-- Savings Goals List Here -->
-      <div id="goalsContainer">
-        <span
-          >Buy a New Car <span class="amt">$999</span>
-          <div class="progress" style="height: 25px">
-            <div
-              class="progress-bar bg-success"
-              role="progressbar"
-              style="width: 100%"
-              aria-valuenow="25"
-              aria-valuemin="0"
-              aria-valuemax="100"
-            >
-              100%
-            </div>
-          </div>
-          <br />
-        </span>
+<body>
+  <div class="logo">
+    <img src="./images/honey.jpeg" />
+  </div>
 
-        <span
-          >Children Education
-          <div class="progress" style="height: 25px">
-            <div
-              class="progress-bar bg-success"
-              role="progressbar"
-              style="width: 25%"
-              aria-valuenow="25"
-              aria-valuemin="0"
-              aria-valuemax="100"
-            >
-              25%
-            </div>
-          </div>
-          <br />
-        </span>
-
-        <span
-          >Buy a House
-          <div class="progress" style="height: 25px">
-            <div
-              class="progress-bar bg-success"
-              role="progressbar"
-              style="width: 0%"
-              aria-valuenow="25"
-              aria-valuemin="0"
-              aria-valuemax="100"
-            >
-              0%
-            </div>
-          </div>
-          <br />
-        </span>
-      </div>
-    </div>
-
-    <div class="container">
-      <form id="form">
-        <button id="b1" class="btn btn-info">Add New Goal</button>
-      </form>
-    </div>
-
+  <div class="container" id="details">
     <div>
-      <ul class="nav justify-content-end">
-        <li class="nav-item">
-          <a class="nav-link" href="dashboard.html">Dashboard</a>
+      <p id="titleName">accountid</p>
+      <h4>My Tokens</h4>
+      <br />
+    </div>
+
+    <div id="newsContainer">
+
+      <ul class="list-group list-group-flush no-bg">
+        <li class="list-group-item no-bg">
+          <div class="d-flex w-100 justify-content-between align-items-center">
+            <img src="./images/nsgd.png" style="width:3em" class="img-fluid" alt="NSGD">
+            <p class="mb-1">New SGD</p>
+            <p class="mb-1">ṈS$ 6999</p>
+          </div>
         </li>
-        <li class="nav-item">
-          <u
-            ><a class="nav-link active" aria-current="page" href="#"
-              >Tokens</a
-            ></u
-          >
+        <li class="list-group-item no-bg">
+          <div class="d-flex w-100 justify-content-between align-items-center">
+            <img src="./images/eth.png" style="width:3em" class="img-fluid" alt="Ethereum">
+            <p class="mb-1">Ethereum</p>
+            <p class="mb-1">Ξ 0.96666</p>
+          </div>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="news.html">News</a>
-        </li>
-        <li class="nav-item" onclick="logout()">
-          <a class="nav-link disabled" href="#" tabindex="-1"> Logout</a>
+        <li class="list-group-item no-bg">
+          <div class="d-flex w-100 justify-content-between align-items-center">
+            <img src="./images/wbtc.png" style="width:3em" class="img-fluid" alt="Bitcoin">
+            <p class="mb-1">W. Bitcoin</p>
+            <p class="mb-1">₿ 0.96666</p>
+          </div>
         </li>
       </ul>
-    </div>
 
-    <!-- JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
-    <script src="metamask.js"></script>
-    <script src="tokens.js"></script>
-    <!-- Bootstrap JS -->
-    <script
-      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-      crossorigin="anonymous"
-    ></script>
-  </body>
+
+
+
+
+
+    </div>
+  </div>
+
+
+
+  <div>
+    <ul class="nav justify-content-end">
+      <li class="nav-item">
+        <a class="nav-link" href="dashboard.html">Dashboard</a>
+      </li>
+      <li class="nav-item">
+        <u><a class="nav-link active" aria-current="page" href="#">Tokens</a></u>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="news.html">News</a>
+      </li>
+      <li class="nav-item" onclick="logout()">
+        <a class="nav-link disabled" href="#" tabindex="-1"> Logout</a>
+      </li>
+    </ul>
+  </div>
+
+  <!-- JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
+  <script src="metamask.js"></script>
+  <script src="tokens.js"></script>
+  <!-- Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+</body>
+
 </html>
