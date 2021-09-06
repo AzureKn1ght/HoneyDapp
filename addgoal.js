@@ -41,6 +41,10 @@ const goalAdd = async (e) => {
     .catch((error) => {
       console.log(error);
     });
+
+    //Alert user to wait for transactions
+    alert("Processing: sending your request");
+    console.log("Mark as complete: processing...");
    
 };
 
