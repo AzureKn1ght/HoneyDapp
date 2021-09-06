@@ -1,51 +1,35 @@
 // (c) AzureKn1ght
-const balance = document.getElementById("balance");
-const titleName = document.getElementById("titleName");
-const b1 = document.getElementById("b1");
-const goalsContainer = document.getElementById("goalsContainer");
+const nsgdBal = document.getElementById("nsgdBal");
+const ethBal = document.getElementById("ethBal");
+const wbtcBal = document.getElementById("wbtcBal");
+const web3 = new Web3(window.ethereum);
 
-var GoalsData = [
-  {
-    goal_id: 1,
-    description: "Books",
-    balance: 3886,
-    date_created: "2021-01-17",
-    user_id: 206,
-  },
-  {
-    goal_id: 2,
-    description: "Music",
-    balance: 4244,
-    date_created: "2021-05-25",
-    user_id: 351,
-  },
-  {
-    goal_id: 3,
-    description: "Books",
-    balance: 7341,
-    date_created: "2020-09-29",
-    user_id: 380,
-  },
-];
+//NSGD CONTRACT
+const nsgdAddress = "0x53b41b7e15c24a2909880997a3ffa28890214893"; //TO REPLACE WITH TOKEN ADDRESS
+const nsgdContract = new web3.eth.Contract(tokenABI, nsgdAddress);
 
-var total_balance = 0;
-var username = "";
-var userID = null;
+//ETH CONTRACT
+const ethAddress = "0x53b41b7e15c24a2909880997a3ffa28890214893"; //TO REPLACE WITH TOKEN ADDRESS
+const ethContract = new web3.eth.Contract(tokenABI, ethAddress);
+
+//WBTC CONTRACT
+const wbtcAddress = "0x53b41b7e15c24a2909880997a3ffa28890214893"; //TO REPLACE WITH TOKEN ADDRESS
+const wbtcContract = new web3.eth.Contract(tokenABI, wbtcAddress);
+
+
+var nsgd_balance = 0;
+var eth_balance = 0;
+var wbtc_balance = 0;
+var accountHash = 0;
 
 //Initialize the page on load
 function init() {
   //Get user name and id
-  username = sessionStorage.getItem("name");
-  userID = sessionStorage.getItem("user_id");
-  titleName.innerHTML = `Hello, test`;
+  accountHash = sessionStorage.getItem("accountId") || "accountid";
+  titleName.innerHTML = `${accountHash}`;
 
-  //Get the user account balance by user ID
-  total_balance = sessionStorage.getItem("balance") || 6999;
-  balance.innerText = `$${total_balance}`;
-
-  //Get the list of goals from server
-  //Calculate the percentage for each goal
-  retrieveGoals(userID);
+  //Get account balance from token contract
+  //getTokenBal(accountHash);
 }
 
 function retrieveGoals(id) {
@@ -135,7 +119,3 @@ function logout() {
 }
 
 init();
-b1.addEventListener("click", function (e) {
-  e.preventDefault();
-  location.href = "addgoal.html";
-});
